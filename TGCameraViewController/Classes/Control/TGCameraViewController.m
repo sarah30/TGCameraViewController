@@ -67,12 +67,9 @@
 
 @end
 
-
-
 @implementation TGCameraViewController
 
-- (void)viewDidLoad
-{
+- (void)viewDidLoad {
     [super viewDidLoad];
     
     if (CGRectGetHeight([[UIScreen mainScreen] bounds]) <= 480) {
@@ -84,8 +81,7 @@
         _toggleButtonWidth.constant = 0;
     }
     
-    [_albumButton.layer setCornerRadius:10.f];
-    [_albumButton.layer setMasksToBounds:YES];
+    [self setupAlbumButton];
     
     _camera = [TGCamera cameraWithFlashButton:_flashButton];
     
@@ -97,8 +93,7 @@
     _bottomRightView.transform = CGAffineTransformMakeRotation(M_PI_2*2);
 }
 
-- (void)viewWillAppear:(BOOL)animated
-{
+- (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     
     [[NSNotificationCenter defaultCenter] addObserver:self
@@ -122,8 +117,7 @@
     _flashButton.enabled = NO;
 }
 
-- (void)viewDidAppear:(BOOL)animated
-{
+- (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
     
     [self deviceOrientationDidChangeNotification];
@@ -160,8 +154,7 @@
     }
 }
 
-- (void)viewDidDisappear:(BOOL)animated
-{
+- (void)viewDidDisappear:(BOOL)animated {
     [super viewDidDisappear:animated];
     
     [[NSNotificationCenter defaultCenter] removeObserver:self];
@@ -169,18 +162,15 @@
     [_camera stopRunning];
 }
 
-- (void)didReceiveMemoryWarning
-{
+- (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
 }
 
-- (BOOL)prefersStatusBarHidden
-{
+- (BOOL)prefersStatusBarHidden {
     return YES;
 }
 
-- (void)dealloc
-{
+- (void)dealloc {
     _captureView = nil;
     _topLeftView = nil;
     _topRightView = nil;
@@ -201,8 +191,7 @@
 #pragma mark -
 #pragma mark - UIImagePickerControllerDelegate
 
-- (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info
-{
+- (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info {
     UIImage *photo = [TGAlbum imageWithMediaInfo:info];
     
     TGPhotoViewController *viewController = [TGPhotoViewController newWithDelegate:_delegate photo:photo];
@@ -212,33 +201,28 @@
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 
-- (void)imagePickerControllerDidCancel:(UIImagePickerController *)picker
-{
+- (void)imagePickerControllerDidCancel:(UIImagePickerController *)picker {
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 
 #pragma mark -
 #pragma mark - Actions
 
-- (IBAction)closeTapped
-{
+- (IBAction)closeTapped {
     if ([_delegate respondsToSelector:@selector(cameraDidCancel)]) {
         [_delegate cameraDidCancel];
     }
 }
 
-- (IBAction)gridTapped
-{
+- (IBAction)gridTapped {
     [_camera disPlayGridView];
 }
 
-- (IBAction)flashTapped
-{
+- (IBAction)flashTapped {
     [_camera changeFlashModeWithButton:_flashButton];
 }
 
-- (IBAction)shotTapped
-{
+- (IBAction)shotTapped {
     _shotButton.enabled =
     _albumButton.enabled = NO;
     
@@ -254,8 +238,7 @@
     }];
 }
 
-- (IBAction)albumTapped
-{
+- (IBAction)albumTapped {
     _shotButton.enabled =
     _albumButton.enabled = NO;
     
@@ -265,13 +248,11 @@
     }];
 }
 
-- (IBAction)toggleTapped
-{
+- (IBAction)toggleTapped {
     [_camera toogleWithFlashButton:_flashButton];
 }
 
-- (IBAction)handleTapGesture:(UITapGestureRecognizer *)recognizer
-{
+- (IBAction)handleTapGesture:(UITapGestureRecognizer *)recognizer {
     CGPoint touchPoint = [recognizer locationInView:_captureView];
     [_camera focusView:_captureView inTouchPoint:touchPoint];
 }
@@ -279,8 +260,16 @@
 #pragma mark -
 #pragma mark - Private methods
 
-- (void)deviceOrientationDidChangeNotification
-{
+- (void)setupAlbumButton {
+    if ([_delegate respondsToSelector:@selector(cameraShouldShowGalleryPicker)]) {
+        _albumButton.hidden = ![_delegate cameraShouldShowGalleryPicker];
+    }
+    
+    [_albumButton.layer setCornerRadius:10.f];
+    [_albumButton.layer setMasksToBounds:YES];
+}
+
+- (void)deviceOrientationDidChangeNotification {
     UIDeviceOrientation orientation = [UIDevice.currentDevice orientation];
     NSInteger degress;
     
@@ -316,8 +305,7 @@
     }];
 }
 
--(void)latestPhoto
-{
+-(void)latestPhoto {
     TGAssetsLibrary *library = [TGAssetsLibrary defaultAssetsLibrary];
     
     __weak __typeof(self)wSelf = self;
@@ -327,8 +315,7 @@
     }];
 }
 
-- (AVCaptureVideoOrientation)videoOrientationForDeviceOrientation:(UIDeviceOrientation)deviceOrientation
-{
+- (AVCaptureVideoOrientation)videoOrientationForDeviceOrientation:(UIDeviceOrientation)deviceOrientation {
     AVCaptureVideoOrientation result = (AVCaptureVideoOrientation) deviceOrientation;
     
     switch (deviceOrientation) {
@@ -347,8 +334,7 @@
     return result;
 }
 
-- (void)viewWillDisappearWithCompletion:(void (^)(void))completion
-{
+- (void)viewWillDisappearWithCompletion:(void (^)(void))completion {
     _actionsView.hidden = YES;
     
     [TGCameraSlideView showSlideUpView:_slideUpView slideDownView:_slideDownView atView:_captureView completion:^{
