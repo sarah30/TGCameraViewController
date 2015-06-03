@@ -21,12 +21,9 @@
 
 @end
 
-
-
 @implementation TGInitialViewController
 
-- (void)viewDidLoad
-{
+- (void)viewDidLoad {
     [super viewDidLoad];
     
     [TGCamera setOption:kTGCameraOptionSaveImageToAlbum value:[NSNumber numberWithBool:YES]];
@@ -42,27 +39,23 @@
     self.navigationItem.rightBarButtonItem = clearButton;
 }
 
-- (void)didReceiveMemoryWarning
-{
+- (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
 }
 
 #pragma mark -
 #pragma mark - TGCameraDelegate required
 
-- (void)cameraDidCancel
-{
+- (void)cameraDidCancel {
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 
-- (void)cameraDidTakePhoto:(UIImage *)image
-{
+- (void)cameraDidTakePhoto:(UIImage *)image {
     _photoView.image = image;
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 
-- (void)cameraDidSelectAlbumPhoto:(UIImage *)image
-{
+- (void)cameraDidSelectAlbumPhoto:(UIImage *)image {
     _photoView.image = image;
     [self dismissViewControllerAnimated:YES completion:nil];
 }
@@ -70,26 +63,26 @@
 #pragma mark -
 #pragma mark - TGCameraDelegate optional
 
-- (void)cameraWillTakePhoto
-{
+- (BOOL)cameraShouldShowGalleryPicker {
+    return NO;
+}
+
+- (void)cameraWillTakePhoto {
     NSLog(@"%s", __PRETTY_FUNCTION__);
 }
 
-- (void)cameraDidSavePhotoAtPath:(NSURL *)assetURL
-{
+- (void)cameraDidSavePhotoAtPath:(NSURL *)assetURL {
     NSLog(@"%s album path: %@", __PRETTY_FUNCTION__, assetURL);
 }
 
-- (void)cameraDidSavePhotoWithError:(NSError *)error
-{
+- (void)cameraDidSavePhotoWithError:(NSError *)error {
     NSLog(@"%s error: %@", __PRETTY_FUNCTION__, error);
 }
 
 #pragma mark -
 #pragma mark - Actions
 
-- (IBAction)takePhotoTapped
-{    
+- (IBAction)takePhotoTapped {
     TGCameraNavigationController *navigationController = [TGCameraNavigationController newWithCameraDelegate:self];
     [self presentViewController:navigationController animated:YES completion:nil];
 }
@@ -97,8 +90,7 @@
 #pragma mark -
 #pragma mark - Private methods
 
-- (void)clearTapped
-{
+- (void)clearTapped {
     _photoView.image = nil;
 }
 
