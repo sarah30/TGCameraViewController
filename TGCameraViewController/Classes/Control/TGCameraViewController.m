@@ -27,7 +27,7 @@
 #import "TGPhotoViewController.h"
 #import "TGCameraSlideView.h"
 #import "TGTintedButton.h"
-
+#import "TGCameraColor.h"
 
 @interface TGCameraViewController () <UIImagePickerControllerDelegate, UINavigationControllerDelegate>
 
@@ -215,6 +215,14 @@
 - (void)imagePickerControllerDidCancel:(UIImagePickerController *)picker
 {
     [self dismissViewControllerAnimated:YES completion:nil];
+}
+
+- (void)navigationController:(UINavigationController *)navigationController willShowViewController:(UIViewController *)viewController animated:(BOOL)animated
+{
+    [[UIApplication sharedApplication] setStatusBarHidden:YES];
+    [viewController prefersStatusBarHidden];
+    viewController.navigationController.navigationBar.barStyle = UIBarStyleBlack;
+    viewController.navigationController.navigationBar.tintColor = [TGCameraColor tintColor];
 }
 
 #pragma mark -
