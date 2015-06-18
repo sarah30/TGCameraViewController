@@ -45,6 +45,7 @@
 @property (strong, nonatomic) IBOutlet UIButton *flashButton;
 @property (strong, nonatomic) IBOutlet TGCameraSlideView *slideUpView;
 @property (strong, nonatomic) IBOutlet TGCameraSlideView *slideDownView;
+@property (strong, nonatomic) IBOutlet UIImageView *shotOutline;
 
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *topViewHeight;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *toggleButtonWidth;
@@ -145,6 +146,7 @@
         _shotButton.enabled =
         _albumButton.enabled =
         _flashButton.enabled = YES;
+        [_shotOutline setHidden: NO];
     }];
      
     if (_wasLoaded == NO) {
@@ -249,7 +251,8 @@
 {
     _shotButton.enabled =
     _albumButton.enabled = NO;
-    
+    [_shotOutline setHidden: YES];
+
     UIDeviceOrientation deviceOrientation = [[UIDevice currentDevice] orientation];
     AVCaptureVideoOrientation videoOrientation = [self videoOrientationForDeviceOrientation:deviceOrientation];
     
@@ -266,6 +269,7 @@
 {
     _shotButton.enabled =
     _albumButton.enabled = NO;
+    [_shotOutline setHidden: YES];
     
     [self viewWillDisappearWithCompletion:^{
         UIImagePickerController *pickerController = [TGAlbum imagePickerControllerWithDelegate:self];

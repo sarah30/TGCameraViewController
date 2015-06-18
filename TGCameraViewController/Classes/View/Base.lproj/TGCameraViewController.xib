@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="7702" systemVersion="14D136" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="7706" systemVersion="14D136" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="7701"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="7703"/>
         <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
     </dependencies>
     <objects>
@@ -16,6 +16,7 @@
                 <outlet property="flashButton" destination="p7O-pE-Mp0" id="Tqo-vg-CGw"/>
                 <outlet property="gridButton" destination="Nol-dD-ETh" id="tfG-QF-CbC"/>
                 <outlet property="separatorView" destination="xFF-75-cke" id="J08-U0-hk1"/>
+                <outlet property="shotOutline" destination="zC2-Nq-ywB" id="byo-mW-d0m"/>
                 <outlet property="shotButton" destination="wtQ-Dg-G3i" id="cWY-WV-5Gp"/>
                 <outlet property="slideDownView" destination="Czb-nz-m44" id="Ga2-kT-HSY"/>
                 <outlet property="slideUpView" destination="vJp-kA-okD" id="hiW-4t-8lC"/>
@@ -181,11 +182,18 @@
                                 <action selector="closeTapped" destination="-1" eventType="touchUpInside" id="mp3-Tj-Kz0"/>
                             </connections>
                         </button>
-                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="wtQ-Dg-G3i" userLabel="Shot" customClass="TGTintedButton">
-                            <rect key="frame" x="261" y="16" width="78" height="78"/>
+                        <imageView hidden="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="CameraShotOutline" translatesAutoresizingMaskIntoConstraints="NO" id="zC2-Nq-ywB" userLabel="ShotOutline">
+                            <rect key="frame" x="262" y="17" width="78" height="78"/>
                             <constraints>
-                                <constraint firstAttribute="width" constant="78" id="HAC-kq-tli"/>
-                                <constraint firstAttribute="height" constant="78" id="Hud-wO-9uR"/>
+                                <constraint firstAttribute="width" constant="78" id="JvU-Ij-1Mf"/>
+                                <constraint firstAttribute="height" constant="78" id="PIT-If-ISx"/>
+                            </constraints>
+                        </imageView>
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="wtQ-Dg-G3i" userLabel="Shot" customClass="TGTintedButton">
+                            <rect key="frame" x="269" y="24" width="63" height="63"/>
+                            <constraints>
+                                <constraint firstAttribute="width" constant="63" id="HAC-kq-tli"/>
+                                <constraint firstAttribute="height" constant="63" id="Hud-wO-9uR"/>
                             </constraints>
                             <state key="normal" image="CameraShot"/>
                             <connections>
@@ -207,8 +215,10 @@
                     <color key="backgroundColor" red="0.078431372549019607" green="0.078431372549019607" blue="0.078431372549019607" alpha="1" colorSpace="calibratedRGB"/>
                     <constraints>
                         <constraint firstAttribute="centerY" secondItem="wtQ-Dg-G3i" secondAttribute="centerY" id="02I-TO-eyD"/>
+                        <constraint firstItem="wtQ-Dg-G3i" firstAttribute="centerY" secondItem="zC2-Nq-ywB" secondAttribute="centerY" id="30q-S1-zv6"/>
                         <constraint firstAttribute="centerY" secondItem="O3k-MF-E1l" secondAttribute="centerY" id="AlZ-MU-XJk"/>
                         <constraint firstAttribute="centerY" secondItem="wxI-gO-dPX" secondAttribute="centerY" id="Cv6-as-QDW"/>
+                        <constraint firstItem="wtQ-Dg-G3i" firstAttribute="centerX" secondItem="zC2-Nq-ywB" secondAttribute="centerX" id="RmB-UW-gSo"/>
                         <constraint firstAttribute="centerX" secondItem="wtQ-Dg-G3i" secondAttribute="centerX" id="UII-sp-ZJm"/>
                         <constraint firstItem="O3k-MF-E1l" firstAttribute="leading" secondItem="rJ9-I8-VJI" secondAttribute="leading" constant="20" id="h2u-nH-RSf"/>
                         <constraint firstAttribute="trailing" secondItem="wxI-gO-dPX" secondAttribute="trailing" constant="20" id="xUB-TR-bow"/>
@@ -294,7 +304,8 @@
         <image name="CameraFlashAuto" width="41" height="41"/>
         <image name="CameraGrid" width="26" height="26"/>
         <image name="CameraRoll" width="26" height="26"/>
-        <image name="CameraShot" width="78" height="78"/>
+        <image name="CameraShot" width="63" height="63"/>
+        <image name="CameraShotOutline" width="78" height="78"/>
         <image name="CameraToggle" width="26" height="26"/>
     </resources>
 </document>
