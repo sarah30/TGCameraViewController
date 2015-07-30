@@ -53,7 +53,7 @@ static NSString* const kTGCacheVignetteKey = @"TGCacheVignetteKey";
 @property (weak, nonatomic) IBOutlet UIButton *timeButton;
 
 @property (strong, nonatomic) NSArray *options;
-@property (weak, nonatomic) NSString *disappearingTime;
+@property (nonatomic) int seconds;
 
 
 - (IBAction)backTapped;
@@ -153,12 +153,10 @@ static NSString* const kTGCacheVignetteKey = @"TGCacheVignetteKey";
     if ([_delegate respondsToSelector:@selector(cameraDidTakePhoto:withDisappearingTime:)]) {
         _photo = _photoView.image;
         
-        int disappearingTime = 10;
-        
         if (_albumPhoto) {
-            [_delegate cameraDidSelectAlbumPhoto:_photo withDisappearingTime:disappearingTime];
+            [_delegate cameraDidSelectAlbumPhoto:_photo withDisappearingTime:self.seconds];
         } else {
-            [_delegate cameraDidTakePhoto:_photo withDisappearingTime:disappearingTime];
+            [_delegate cameraDidTakePhoto:_photo withDisappearingTime:self.seconds];
         }
         
         ALAuthorizationStatus status = [ALAssetsLibrary authorizationStatus];
@@ -294,6 +292,7 @@ static NSString* const kTGCacheVignetteKey = @"TGCacheVignetteKey";
 }
 
 - (void)pickerView:(UIPickerView *)pickerView didSelectRow:(NSInteger)row inComponent:(NSInteger)component {
+    self.seconds = row;
     pickerView.hidden = true;
     [self.timeButton setTitle:self.options[row] forState:UIControlStateNormal];
 }

@@ -238,7 +238,7 @@
                 if ([_delegate cameraShouldShowPreviewScreen]) {
                     [self navigateToPhotoViewController:photo];
                 } else {
-                    [_delegate cameraDidTakePhoto:photo withDisappearingTime:10];
+                    [_delegate cameraDidTakePhoto:photo withDisappearingTime:0];
                 }
             } else {
                 [self navigateToPhotoViewController:photo];
