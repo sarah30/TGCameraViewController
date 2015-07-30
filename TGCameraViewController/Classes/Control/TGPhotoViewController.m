@@ -98,6 +98,7 @@ static NSString* const kTGCacheVignetteKey = @"TGCacheVignetteKey";
     
     [self addDetailViewToButton:_defaultFilterButton];
     
+    self.timeButton.tintColor = [TGCameraColor tintColor];
     [self setupTimePicker];
 }
 
