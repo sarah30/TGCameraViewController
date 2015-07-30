@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="6751" systemVersion="14C1514" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="7706" systemVersion="14E46" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6736"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="7703"/>
         <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
     </dependencies>
     <objects>
@@ -12,6 +12,8 @@
                 <outlet property="defaultFilterButton" destination="9jP-uX-c4U" id="AEq-cV-Ah8"/>
                 <outlet property="filterView" destination="mfq-V7-07J" id="Pf2-0x-IU7"/>
                 <outlet property="photoView" destination="AgS-wg-ici" id="7RM-EQ-xh7"/>
+                <outlet property="pickerView" destination="2O4-Oh-JoZ" id="hk8-UW-MkT"/>
+                <outlet property="timeButton" destination="SrO-KZ-nkd" id="4PP-Yt-E3a"/>
                 <outlet property="topViewHeight" destination="tVK-li-H3V" id="3hD-FB-P1W"/>
                 <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
             </connections>
@@ -22,8 +24,21 @@
             <subviews>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="rRi-bL-lCE" userLabel="Top View">
                     <rect key="frame" x="0.0" y="0.0" width="600" height="60"/>
+                    <subviews>
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="SrO-KZ-nkd" userLabel="Disappearing Time">
+                            <rect key="frame" x="235" y="15" width="129" height="30"/>
+                            <state key="normal" title="Disappearing Time">
+                                <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                            </state>
+                            <connections>
+                                <action selector="disappearingTimeTapped" destination="-1" eventType="touchUpInside" id="9Iw-3V-W37"/>
+                            </connections>
+                        </button>
+                    </subviews>
                     <color key="backgroundColor" red="0.1176470588" green="0.1176470588" blue="0.1176470588" alpha="1" colorSpace="calibratedRGB"/>
                     <constraints>
+                        <constraint firstAttribute="centerY" secondItem="SrO-KZ-nkd" secondAttribute="centerY" id="AhH-WM-0Y4"/>
+                        <constraint firstAttribute="centerX" secondItem="SrO-KZ-nkd" secondAttribute="centerX" constant="0.5" id="NdM-74-w4f"/>
                         <constraint firstAttribute="height" constant="60" id="tVK-li-H3V"/>
                     </constraints>
                 </view>
@@ -92,11 +107,20 @@
                         <constraint firstAttribute="height" constant="50" id="AmE-W0-HE1"/>
                     </constraints>
                 </view>
+                <pickerView hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="2O4-Oh-JoZ">
+                    <rect key="frame" x="10" y="279" width="580" height="162"/>
+                    <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
+                    <connections>
+                        <outlet property="dataSource" destination="-1" id="mnu-y4-eLU"/>
+                        <outlet property="delegate" destination="-1" id="0o9-Zv-afo"/>
+                    </connections>
+                </pickerView>
             </subviews>
             <color key="backgroundColor" red="0.1176470588" green="0.1176470588" blue="0.1176470588" alpha="1" colorSpace="calibratedRGB"/>
             <color key="tintColor" red="1" green="0.35686275360000003" blue="0.0039215688589999999" alpha="1" colorSpace="deviceRGB"/>
             <constraints>
                 <constraint firstItem="rRi-bL-lCE" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" id="0bN-43-pjc"/>
+                <constraint firstItem="2O4-Oh-JoZ" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" constant="10" id="6hD-HF-fGo"/>
                 <constraint firstItem="AgS-wg-ici" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="Az4-RI-dx8"/>
                 <constraint firstItem="Wwe-hD-eWO" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="DxI-HU-wrS"/>
                 <constraint firstItem="ubt-nz-mqT" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="L4g-Gm-enY"/>
@@ -108,6 +132,8 @@
                 <constraint firstItem="ubt-nz-mqT" firstAttribute="top" secondItem="AgS-wg-ici" secondAttribute="bottom" id="bqG-Vq-NCB"/>
                 <constraint firstItem="rRi-bL-lCE" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="crg-E0-6KX"/>
                 <constraint firstAttribute="trailing" secondItem="ubt-nz-mqT" secondAttribute="trailing" id="djh-Dk-S9F"/>
+                <constraint firstAttribute="trailing" secondItem="2O4-Oh-JoZ" secondAttribute="trailing" constant="10" id="e9p-gc-zlB"/>
+                <constraint firstItem="2O4-Oh-JoZ" firstAttribute="centerY" secondItem="AgS-wg-ici" secondAttribute="centerY" id="h8j-BM-zxx"/>
                 <constraint firstAttribute="bottom" secondItem="Wwe-hD-eWO" secondAttribute="bottom" id="ynZ-fZ-1za"/>
             </constraints>
             <nil key="simulatedStatusBarMetrics"/>

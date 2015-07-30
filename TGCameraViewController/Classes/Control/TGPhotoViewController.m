@@ -34,7 +34,7 @@ static NSString* const kTGCacheSatureKey = @"TGCacheSatureKey";
 static NSString* const kTGCacheCurveKey = @"TGCacheCurveKey";
 static NSString* const kTGCacheVignetteKey = @"TGCacheVignetteKey";
 
-@interface TGPhotoViewController ()
+@interface TGPhotoViewController () <UIPickerViewDelegate, UIPickerViewDataSource>
 
 @property (strong, nonatomic) IBOutlet UIImageView *photoView;
 @property (strong, nonatomic) IBOutlet UIView *bottomView;
@@ -48,6 +48,13 @@ static NSString* const kTGCacheVignetteKey = @"TGCacheVignetteKey";
 @property (strong, nonatomic) UIImage *photo;
 @property (strong, nonatomic) NSCache *cachePhoto;
 @property (nonatomic) BOOL albumPhoto;
+
+@property (weak, nonatomic) IBOutlet UIPickerView *pickerView;
+@property (weak, nonatomic) IBOutlet UIButton *timeButton;
+
+@property (strong, nonatomic) NSArray *options;
+@property (weak, nonatomic) NSString *disappearingTime;
+
 
 - (IBAction)backTapped;
 - (IBAction)confirmTapped;
@@ -90,6 +97,22 @@ static NSString* const kTGCacheVignetteKey = @"TGCacheVignetteKey";
     _photoView.image = _photo;
     
     [self addDetailViewToButton:_defaultFilterButton];
+    
+    [self setupTimePicker];
+}
+
+- (void)setupTimePicker {
+    NSMutableArray *optionsArray = [NSMutableArray array];
+    
+    [optionsArray addObject: @"Never"];
+    
+    for (int i = 10; i > 1; i--) {
+        [optionsArray addObject:[NSString stringWithFormat:@"%0d seconds", i]];
+    }
+    
+    [optionsArray addObject: @"01 second"];
+    
+    self.options = [optionsArray copy];
 }
 
 - (void)didReceiveMemoryWarning
@@ -127,13 +150,15 @@ static NSString* const kTGCacheVignetteKey = @"TGCacheVignetteKey";
         [_delegate cameraWillTakePhoto];
     }
     
-    if ([_delegate respondsToSelector:@selector(cameraDidTakePhoto:)]) {
+    if ([_delegate respondsToSelector:@selector(cameraDidTakePhoto:withDisappearingTime:)]) {
         _photo = _photoView.image;
         
+        int disappearingTime = 10;
+        
         if (_albumPhoto) {
-            [_delegate cameraDidSelectAlbumPhoto:_photo];
+            [_delegate cameraDidSelectAlbumPhoto:_photo withDisappearingTime:disappearingTime];
         } else {
-            [_delegate cameraDidTakePhoto:_photo];
+            [_delegate cameraDidTakePhoto:_photo withDisappearingTime:disappearingTime];
         }
         
         ALAuthorizationStatus status = [ALAssetsLibrary authorizationStatus];
@@ -247,6 +272,30 @@ static NSString* const kTGCacheVignetteKey = @"TGCacheVignetteKey";
 + (instancetype)newController
 {
     return [super new];
+}
+
+#pragma mark -
+#pragma mark - PickerView methods
+
+- (IBAction)disappearingTimeTapped {
+    self.pickerView.hidden = false;
+}
+
+- (NSInteger)numberOfComponentsInPickerView:(UIPickerView *)pickerView {
+    return 1;
+}
+
+- (NSInteger)pickerView:(UIPickerView *)pickerView numberOfRowsInComponent:(NSInteger)component {
+    return self.options.count;
+}
+
+- (NSString *)pickerView:(UIPickerView *)pickerView titleForRow:(NSInteger)row forComponent:(NSInteger)component {
+    return self.options[row];
+}
+
+- (void)pickerView:(UIPickerView *)pickerView didSelectRow:(NSInteger)row inComponent:(NSInteger)component {
+    pickerView.hidden = true;
+    [self.timeButton setTitle:self.options[row] forState:UIControlStateNormal];
 }
 
 @end

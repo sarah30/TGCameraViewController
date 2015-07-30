@@ -58,6 +58,7 @@
 - (IBAction)shotTapped;
 - (IBAction)albumTapped;
 - (IBAction)toggleTapped;
+
 - (IBAction)handleTapGesture:(UITapGestureRecognizer *)recognizer;
 
 - (void)deviceOrientationDidChangeNotification;
@@ -91,6 +92,7 @@
     _topRightView.transform = CGAffineTransformMakeRotation(M_PI_2);
     _bottomLeftView.transform = CGAffineTransformMakeRotation(-M_PI_2);
     _bottomRightView.transform = CGAffineTransformMakeRotation(M_PI_2*2);
+
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -236,7 +238,7 @@
                 if ([_delegate cameraShouldShowPreviewScreen]) {
                     [self navigateToPhotoViewController:photo];
                 } else {
-                    [_delegate cameraDidTakePhoto:photo];
+                    [_delegate cameraDidTakePhoto:photo withDisappearingTime:10];
                 }
             } else {
                 [self navigateToPhotoViewController:photo];

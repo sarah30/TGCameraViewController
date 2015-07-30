@@ -77,8 +77,8 @@
 @protocol TGCameraDelegate <NSObject>
 
 - (void)cameraDidCancel;
-- (void)cameraDidSelectAlbumPhoto:(UIImage *)image;
-- (void)cameraDidTakePhoto:(UIImage *)image;
+- (void)cameraDidSelectAlbumPhoto:(UIImage *)image withDisappearingTime:(int)timeToDisappear;
+- (void)cameraDidTakePhoto:(UIImage *)image withDisappearingTime:(int)timeToDisappear;
 
 @optional
 
