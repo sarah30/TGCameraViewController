@@ -107,10 +107,10 @@ static NSString* const kTGCacheVignetteKey = @"TGCacheVignetteKey";
     [optionsArray addObject: @"Never"];
     
     for (int i = 10; i > 1; i--) {
-        [optionsArray addObject:[NSString stringWithFormat:@"%0d seconds", i]];
+        [optionsArray addObject:[NSString stringWithFormat:@"%d seconds", i]];
     }
     
-    [optionsArray addObject: @"01 second"];
+    [optionsArray addObject: @"1 second"];
     
     self.options = [optionsArray copy];
 }
