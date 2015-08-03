@@ -105,13 +105,11 @@ static NSString* const kTGCacheVignetteKey = @"TGCacheVignetteKey";
 - (void)setupTimePicker {
     NSMutableArray *optionsArray = [NSMutableArray array];
     
-    [optionsArray addObject: @"Never"];
+    [optionsArray addObject: @(0)];
     
-    for (int i = 10; i > 1; i--) {
-        [optionsArray addObject:[NSString stringWithFormat:@"%d seconds", i]];
+    for (int i = 10; i >= 1; i--) {
+        [optionsArray addObject:@(i)];
     }
-    
-    [optionsArray addObject: @"1 second"];
     
     self.options = [optionsArray copy];
 }
@@ -277,7 +275,7 @@ static NSString* const kTGCacheVignetteKey = @"TGCacheVignetteKey";
 #pragma mark - PickerView methods
 
 - (IBAction)disappearingTimeTapped {
-    self.pickerView.hidden = false;
+    self.pickerView.hidden = !self.pickerView.hidden;
 }
 
 - (NSInteger)numberOfComponentsInPickerView:(UIPickerView *)pickerView {
@@ -289,13 +287,24 @@ static NSString* const kTGCacheVignetteKey = @"TGCacheVignetteKey";
 }
 
 - (NSString *)pickerView:(UIPickerView *)pickerView titleForRow:(NSInteger)row forComponent:(NSInteger)component {
-    return self.options[row];
+    return [self getTitleForRow:row];
 }
 
+
 - (void)pickerView:(UIPickerView *)pickerView didSelectRow:(NSInteger)row inComponent:(NSInteger)component {
-    self.seconds = row;
-    pickerView.hidden = true;
-    [self.timeButton setTitle:self.options[row] forState:UIControlStateNormal];
+    self.seconds = ((NSNumber *)self.options[row]).intValue;
+    [self.timeButton setTitle:[self getTitleForRow:row] forState:UIControlStateNormal];
+}
+
+- (NSString *)getTitleForRow:(int)row {
+    int value = ((NSNumber *)self.options[row]).intValue;
+    if(value == 0) {
+        return @"Never";
+    } else if (value == 1) {
+        return @"1 second";
+    } else {
+        return [NSString stringWithFormat:@"%d seconds", value];
+    }
 }
 
 @end
