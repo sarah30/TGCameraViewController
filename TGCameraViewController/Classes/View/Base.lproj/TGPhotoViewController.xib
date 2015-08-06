@@ -26,8 +26,8 @@
                     <rect key="frame" x="0.0" y="0.0" width="600" height="60"/>
                     <subviews>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="SrO-KZ-nkd" userLabel="Disappearing Time">
-                            <rect key="frame" x="407" y="15" width="177" height="30"/>
-                            <state key="normal" title="Set Time Allowed To View">
+                            <rect key="frame" x="457" y="15" width="127" height="30"/>
+                            <state key="normal" title="+Set Time To View">
                                 <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                             </state>
                             <connections>

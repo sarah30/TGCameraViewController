@@ -88,6 +88,5 @@
 - (BOOL)cameraShouldShowGalleryPicker;
 - (BOOL)cameraShouldShowPreviewScreen;
 - (BOOL)cameraShouldShowDisapearingTime;
-- (UIColor *)disappearingTimeTintColor;
 
 @end
