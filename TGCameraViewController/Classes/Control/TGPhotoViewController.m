@@ -99,16 +99,24 @@ static NSString* const kTGCacheVignetteKey = @"TGCacheVignetteKey";
 }
 
 - (void)setupDisappearingButton {
-    if ( [_delegate respondsToSelector:@selector(cameraShouldShowDissapearingTime)]) {
-        if ([_delegate cameraShouldShowDissapearingTime]) {
+    if ([_delegate respondsToSelector:@selector(cameraShouldShowDisapearingTime)]) {
+        if ([_delegate cameraShouldShowDisapearingTime]) {
             [self setupTimePicker];
-            self.timeButton.tintColor = [TGCameraColor tintColor];
+            [self setupDisappearingButtonColor];
             self.timeButton.hidden = NO;
             return;
         }
     }
     
     self.timeButton.hidden = YES;
+}
+               
+- (void)setupDisappearingButtonColor {
+    if([_delegate respondsToSelector:@selector(disappearingTimeTintColor)]) {
+        self.timeButton.tintColor = [_delegate disappearingTimeTintColor];
+    } else {
+        self.timeButton.tintColor = [TGCameraColor tintColor];
+    }
 }
 
 - (void)setupTimePicker {
