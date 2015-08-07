@@ -293,7 +293,7 @@ static NSString* const kTGCacheVignetteKey = @"TGCacheVignetteKey";
 - (NSString *)getTitleForRow:(int)row {
     int value = ((NSNumber *)self.options[row]).intValue;
     if(value == 0) {
-        return @"Never";
+        return @"Forever";
     } else if (value == 1) {
         return @"1 second";
     } else {
