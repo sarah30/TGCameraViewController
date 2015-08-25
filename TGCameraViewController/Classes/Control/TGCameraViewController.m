@@ -71,6 +71,8 @@
 @implementation TGCameraViewController
 
 - (void)viewDidLoad {
+    NSLog(@"%s",__FUNCTION__);
+
     [super viewDidLoad];
     
     if (CGRectGetHeight([[UIScreen mainScreen] bounds]) <= 480) {
@@ -92,10 +94,11 @@
     _topRightView.transform = CGAffineTransformMakeRotation(M_PI_2);
     _bottomLeftView.transform = CGAffineTransformMakeRotation(-M_PI_2);
     _bottomRightView.transform = CGAffineTransformMakeRotation(M_PI_2*2);
-
 }
 
 - (void)viewWillAppear:(BOOL)animated {
+    NSLog(@"%s",__FUNCTION__);
+
     [super viewWillAppear:animated];
     
     [[NSNotificationCenter defaultCenter] addObserver:self
@@ -120,6 +123,8 @@
 }
 
 - (void)viewDidAppear:(BOOL)animated {
+    NSLog(@"%s",__FUNCTION__);
+
     [super viewDidAppear:animated];
     
     [self deviceOrientationDidChangeNotification];
