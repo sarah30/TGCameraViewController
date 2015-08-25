@@ -64,11 +64,15 @@
 #pragma mark - TGCameraDelegate optional
 
 - (BOOL)cameraShouldShowGalleryPicker {
-    return NO;
+    return YES;
 }
 
 - (BOOL)cameraShouldShowPreviewScreen {
-    return YES;
+    return NO;
+}
+
+- (BOOL)cameraShouldShowPreviewScreenForGalleryPicker {
+    return NO;
 }
 
 - (void)cameraWillTakePhoto {

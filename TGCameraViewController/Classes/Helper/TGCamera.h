@@ -87,6 +87,7 @@
 - (void)cameraWillTakePhoto;
 - (BOOL)cameraShouldShowGalleryPicker;
 - (BOOL)cameraShouldShowPreviewScreen;
+- (BOOL)cameraShouldShowPreviewScreenForGalleryPicker;
 - (BOOL)cameraShouldShowDisapearingTime;
 
 @end

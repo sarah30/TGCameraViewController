@@ -196,9 +196,19 @@
 - (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info {
     UIImage *photo = [TGAlbum imageWithMediaInfo:info];
     
-    TGPhotoViewController *viewController = [TGPhotoViewController newWithDelegate:_delegate photo:photo];
-    [viewController setAlbumPhoto:YES];
-    [self.navigationController pushViewController:viewController animated:NO];
+    if ([_delegate respondsToSelector:@selector(cameraShouldShowPreviewScreenForGalleryPicker)]) {
+        if ([_delegate cameraShouldShowPreviewScreenForGalleryPicker]) {
+            TGPhotoViewController *viewController = [TGPhotoViewController newWithDelegate:_delegate photo:photo];
+            [viewController setAlbumPhoto:YES];
+            [self.navigationController pushViewController:viewController animated:NO];
+        }else{
+            [_delegate cameraDidTakePhoto:photo withDisappearingTime:0];
+        }
+    }else{
+        TGPhotoViewController *viewController = [TGPhotoViewController newWithDelegate:_delegate photo:photo];
+        [viewController setAlbumPhoto:YES];
+        [self.navigationController pushViewController:viewController animated:NO];
+    }
     
     [self dismissViewControllerAnimated:YES completion:nil];
 }
@@ -255,7 +265,7 @@
 - (IBAction)albumTapped {
     _shotButton.enabled =
     _albumButton.enabled = NO;
-    
+
     [self viewWillDisappearWithCompletion:^{
         UIImagePickerController *pickerController = [TGAlbum imagePickerControllerWithDelegate:self];
         [self presentViewController:pickerController animated:YES completion:nil];
