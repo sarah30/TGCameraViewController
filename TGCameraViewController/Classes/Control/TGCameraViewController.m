@@ -27,6 +27,9 @@
 #import "TGPhotoViewController.h"
 #import "TGCameraSlideView.h"
 #import "TGTintedButton.h"
+#import <CoreLocation/CoreLocation.h>
+#import <AssetsLibrary/AssetsLibrary.h>
+#import <ImageIO/ImageIO.h>
 
 
 @interface TGCameraViewController () <UIImagePickerControllerDelegate, UINavigationControllerDelegate>
@@ -200,22 +203,84 @@
 
 - (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info {
     UIImage *photo = [TGAlbum imageWithMediaInfo:info];
-    
-    if ([_delegate respondsToSelector:@selector(cameraShouldShowPreviewScreenForGalleryPicker)]) {
-        if ([_delegate cameraShouldShowPreviewScreenForGalleryPicker]) {
-            TGPhotoViewController *viewController = [TGPhotoViewController newWithDelegate:_delegate photo:photo];
-            [viewController setAlbumPhoto:YES];
-            [self.navigationController pushViewController:viewController animated:NO];
-        }else{
-            [_delegate cameraDidTakePhoto:photo withDisappearingTime:0];
-        }
-    }else{
-        TGPhotoViewController *viewController = [TGPhotoViewController newWithDelegate:_delegate photo:photo];
-        [viewController setAlbumPhoto:YES];
-        [self.navigationController pushViewController:viewController animated:NO];
+    //NSMutableDictionary* exifDict;
+
+    if ([[info allKeys] containsObject:UIImagePickerControllerReferenceURL]){
+        
+        NSURL *assetURL = [info objectForKey:UIImagePickerControllerReferenceURL];
+        ALAssetsLibrary *library = [[ALAssetsLibrary alloc] init];
+        [library assetForURL:assetURL resultBlock:^(ALAsset *asset) {
+            if (asset)
+            {
+                NSDictionary *metadata = asset.defaultRepresentation.metadata;
+                NSMutableDictionary *exifDict = [[NSMutableDictionary alloc] initWithDictionary:metadata];
+                
+                //IOS8対応
+                //ALAssetRepresentation *assetRepresentation = [asset defaultRepresentation];
+                //UIImage *fullscreenImage = [UIImage imageWithCGImage:[assetRepresentation fullScreenImage]];
+                //UIImage *photo = scaleAndRotateImage(fullscreenImage); //イメージをセット
+                
+                if ([_delegate respondsToSelector:@selector(cameraShouldShowPreviewScreenForGalleryPicker)]) {
+                    if ([_delegate cameraShouldShowPreviewScreenForGalleryPicker]) {
+                        TGPhotoViewController *viewController = [TGPhotoViewController newWithDelegate:_delegate photo:photo];
+                        [viewController setAlbumPhoto:YES];
+                        [self.navigationController pushViewController:viewController animated:NO];
+                    }else{
+                        [_delegate cameraDidSelectAlbumPhoto:photo exifDict:exifDict withDisappearingTime:0];
+                    }
+                }else{
+                    TGPhotoViewController *viewController = [TGPhotoViewController newWithDelegate:_delegate photo:photo];
+                    [viewController setAlbumPhoto:YES];
+                    [self.navigationController pushViewController:viewController animated:NO];
+                }
+                
+                [self dismissViewControllerAnimated:YES completion:nil];
+            }
+            else
+            {
+                [library enumerateGroupsWithTypes:ALAssetsGroupPhotoStream usingBlock:^(ALAssetsGroup *group, BOOL *stop) {
+                    [group enumerateAssetsWithOptions:NSEnumerationReverse usingBlock:^(ALAsset *asset, NSUInteger index, BOOL *stop) {
+                        if ([asset.defaultRepresentation.url isEqual:assetURL]){
+                            // フォトストリームのALAsset取得成功
+                            *stop = YES;
+                            NSDictionary *metadata = asset.defaultRepresentation.metadata;
+                            NSMutableDictionary *exifDict = [[NSMutableDictionary alloc] initWithDictionary:metadata];
+                            
+                            //IOS8対応
+                            //ALAssetRepresentation *assetRepresentation = [asset defaultRepresentation];
+                            //UIImage *fullscreenImage = [UIImage imageWithCGImage:[assetRepresentation fullScreenImage]];
+                            //UIImage *photo = scaleAndRotateImage(fullscreenImage); //イメージをセット
+                            
+                            
+                            if ([_delegate respondsToSelector:@selector(cameraShouldShowPreviewScreenForGalleryPicker)]) {
+                                if ([_delegate cameraShouldShowPreviewScreenForGalleryPicker]) {
+                                    TGPhotoViewController *viewController = [TGPhotoViewController newWithDelegate:_delegate photo:photo];
+                                    [viewController setAlbumPhoto:YES];
+                                    [self.navigationController pushViewController:viewController animated:NO];
+                                }else{
+                                    [_delegate cameraDidSelectAlbumPhoto:photo exifDict:exifDict withDisappearingTime:0];
+                                }
+                            }else{
+                                TGPhotoViewController *viewController = [TGPhotoViewController newWithDelegate:_delegate photo:photo];
+                                [viewController setAlbumPhoto:YES];
+                                [self.navigationController pushViewController:viewController animated:NO];
+                            }
+                            
+                            [self dismissViewControllerAnimated:YES completion:nil];
+                            
+                        }
+                    }];
+                } failureBlock:^(NSError *error) {
+                    // フォトストリームのALAsset取得失敗
+                }];
+            }
+        } failureBlock:^(NSError *error) {
+            // フォトストリーム以外のALAsset取得失敗
+        }];
+        
     }
     
-    [self dismissViewControllerAnimated:YES completion:nil];
+
 }
 
 - (void)imagePickerControllerDidCancel:(UIImagePickerController *)picker {
@@ -253,7 +318,7 @@
                 if ([_delegate cameraShouldShowPreviewScreen]) {
                     [self navigateToPhotoViewController:photo];
                 } else {
-                    [_delegate cameraDidTakePhoto:photo withDisappearingTime:0];
+                    [_delegate cameraDidTakePhoto:photo exifDict:nil withDisappearingTime:0];
                 }
             } else {
                 [self navigateToPhotoViewController:photo];

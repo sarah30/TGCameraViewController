@@ -50,12 +50,12 @@
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 
-- (void)cameraDidTakePhoto:(UIImage *)image withDisappearingTime:(int)timeToDisappear{
+- (void)cameraDidTakePhoto:(UIImage *)image exifDict:(NSMutableDictionary *)exifDict withDisappearingTime:(int)timeToDisappear{
     _photoView.image = image;
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 
-- (void)cameraDidSelectAlbumPhoto:(UIImage *)image withDisappearingTime:(int)timeToDisappear {
+- (void)cameraDidSelectAlbumPhoto:(UIImage *)image exifDict:(NSMutableDictionary *)exifDict  withDisappearingTime:(int)timeToDisappear {
     _photoView.image = image;
     [self dismissViewControllerAnimated:YES completion:nil];
 }
