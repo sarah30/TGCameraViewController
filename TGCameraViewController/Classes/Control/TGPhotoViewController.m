@@ -156,7 +156,7 @@ static NSString* const kTGCacheVignetteKey = @"TGCacheVignetteKey";
         _photo = _photoView.image;
         
         if (_albumPhoto) {
-            [_delegate cameraDidSelectAlbumPhoto:_photo exifDict:nil withDisappearingTime:self.seconds];
+            [_delegate cameraDidSelectAlbumPhoto:_photo exifDict:nil imageData:nil withDisappearingTime:self.seconds];
         } else {
             [_delegate cameraDidTakePhoto:_photo exifDict:nil withDisappearingTime:self.seconds];
         }

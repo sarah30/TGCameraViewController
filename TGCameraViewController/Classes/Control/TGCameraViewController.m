@@ -219,6 +219,11 @@
                 //ALAssetRepresentation *assetRepresentation = [asset defaultRepresentation];
                 //UIImage *fullscreenImage = [UIImage imageWithCGImage:[assetRepresentation fullScreenImage]];
                 //UIImage *photo = scaleAndRotateImage(fullscreenImage); //イメージをセット
+                Byte *buffer = (Byte*)malloc(asset.defaultRepresentation.size);
+                NSUInteger buffered = [asset.defaultRepresentation getBytes:buffer fromOffset:0.0 length:asset.defaultRepresentation.size error:nil];
+                NSData *imageData = [NSData dataWithBytesNoCopy:buffer length:buffered freeWhenDone:YES];
+                
+                
                 
                 if ([_delegate respondsToSelector:@selector(cameraShouldShowPreviewScreenForGalleryPicker)]) {
                     if ([_delegate cameraShouldShowPreviewScreenForGalleryPicker]) {
@@ -226,7 +231,7 @@
                         [viewController setAlbumPhoto:YES];
                         [self.navigationController pushViewController:viewController animated:NO];
                     }else{
-                        [_delegate cameraDidSelectAlbumPhoto:photo exifDict:exifDict withDisappearingTime:0];
+                        [_delegate cameraDidSelectAlbumPhoto:photo exifDict:exifDict imageData:imageData withDisappearingTime:0];
                     }
                 }else{
                     TGPhotoViewController *viewController = [TGPhotoViewController newWithDelegate:_delegate photo:photo];
@@ -251,6 +256,10 @@
                             //UIImage *fullscreenImage = [UIImage imageWithCGImage:[assetRepresentation fullScreenImage]];
                             //UIImage *photo = scaleAndRotateImage(fullscreenImage); //イメージをセット
                             
+                            Byte *buffer = (Byte*)malloc(asset.defaultRepresentation.size);
+                            NSUInteger buffered = [asset.defaultRepresentation getBytes:buffer fromOffset:0.0 length:asset.defaultRepresentation.size error:nil];
+                            NSData *imageData = [NSData dataWithBytesNoCopy:buffer length:buffered freeWhenDone:YES];
+                            
                             
                             if ([_delegate respondsToSelector:@selector(cameraShouldShowPreviewScreenForGalleryPicker)]) {
                                 if ([_delegate cameraShouldShowPreviewScreenForGalleryPicker]) {
@@ -258,7 +267,7 @@
                                     [viewController setAlbumPhoto:YES];
                                     [self.navigationController pushViewController:viewController animated:NO];
                                 }else{
-                                    [_delegate cameraDidSelectAlbumPhoto:photo exifDict:exifDict withDisappearingTime:0];
+                                    [_delegate cameraDidSelectAlbumPhoto:photo  exifDict:exifDict imageData:imageData withDisappearingTime:0];
                                 }
                             }else{
                                 TGPhotoViewController *viewController = [TGPhotoViewController newWithDelegate:_delegate photo:photo];

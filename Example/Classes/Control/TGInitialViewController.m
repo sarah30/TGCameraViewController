@@ -55,7 +55,7 @@
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 
-- (void)cameraDidSelectAlbumPhoto:(UIImage *)image exifDict:(NSMutableDictionary *)exifDict  withDisappearingTime:(int)timeToDisappear {
+- (void)cameraDidSelectAlbumPhoto:(UIImage *)image exifDict:(NSMutableDictionary *)exifDict imageData:(NSData *)imageData withDisappearingTime:(int)timeToDisappear {
     _photoView.image = image;
     [self dismissViewControllerAnimated:YES completion:nil];
 }
