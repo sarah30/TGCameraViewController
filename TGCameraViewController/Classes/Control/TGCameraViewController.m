@@ -258,7 +258,7 @@
                             
                             Byte *buffer = (Byte*)malloc(asset.defaultRepresentation.size);
                             NSUInteger buffered = [asset.defaultRepresentation getBytes:buffer fromOffset:0.0 length:asset.defaultRepresentation.size error:nil];
-                            NSData *imageData = [NSData dataWithBytesNoCopy:buffer length:buffered freeWhenDone:YES];
+                            NSData *imageData = UIImageJPEGRepresentation(photo, 1.0); //[NSData dataWithBytesNoCopy:buffer length:buffered freeWhenDone:YES];
                             
                             
                             if ([_delegate respondsToSelector:@selector(cameraShouldShowPreviewScreenForGalleryPicker)]) {
