@@ -61,7 +61,22 @@
         if (imageDataSampleBuffer != NULL) {
             NSData *imageData = [AVCaptureStillImageOutput jpegStillImageNSDataRepresentation:imageDataSampleBuffer];
             UIImage *image = [UIImage imageWithData:imageData];
-            UIImage *croppedImage = [weakSelf cropImage:image withCropSize:cropSize];
+
+            CGFloat width = image.size.width;
+            CGFloat height = image.size.height;
+            
+            CGFloat crop_size_;
+            if (width>height) {
+                crop_size_ = height;
+            }else{
+                crop_size_ = width;
+            }
+            
+            if(crop_size_>1280){
+                crop_size_ = 1280;
+            }
+            
+            UIImage *croppedImage = [weakSelf cropImage:image withCropSize:CGSizeMake(crop_size_, crop_size_)];
             completion(croppedImage);
         }
     }];

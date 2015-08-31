@@ -36,7 +36,7 @@
     NSString *mediaType = info[UIImagePickerControllerMediaType];
     
     if ([mediaType isEqualToString:(NSString *) kUTTypeImage]) {
-        return info[UIImagePickerControllerEditedImage];
+        return info[UIImagePickerControllerOriginalImage];
     }
     
     return nil;
@@ -54,7 +54,7 @@
     pickerController = [UIImagePickerController new];
     pickerController.delegate = delegate;
     pickerController.mediaTypes = @[(NSString *) kUTTypeImage];
-    pickerController.allowsEditing = YES;
+    pickerController.allowsEditing = NO;
     
     return pickerController;
 }
