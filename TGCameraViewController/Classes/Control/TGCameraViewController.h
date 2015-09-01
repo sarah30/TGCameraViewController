@@ -34,4 +34,7 @@
 
 @property (weak) id<TGCameraDelegate> delegate;
 
+-(void)deviceOrientationChange:(UIDeviceOrientation)deviceOrientation;
+@property (nonatomic) UIDeviceOrientation deviceOrientation;
+
 @end

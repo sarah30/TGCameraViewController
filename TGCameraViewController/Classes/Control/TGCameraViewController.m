@@ -317,7 +317,12 @@
     _shotButton.enabled =
     _albumButton.enabled = NO;
     
-    UIDeviceOrientation deviceOrientation = [[UIDevice currentDevice] orientation];
+    UIDeviceOrientation deviceOrientation;
+    if (self.deviceOrientation) {
+        deviceOrientation = self.deviceOrientation;
+    }else{
+        deviceOrientation = [[UIDevice currentDevice] orientation];
+    }
     AVCaptureVideoOrientation videoOrientation = [self videoOrientationForDeviceOrientation:deviceOrientation];
     
     [self viewWillDisappearWithCompletion:^{
@@ -373,7 +378,14 @@
 }
 
 - (void)deviceOrientationDidChangeNotification {
-    UIDeviceOrientation orientation = [UIDevice.currentDevice orientation];
+    [self orientationDevice:[UIDevice.currentDevice orientation]];
+}
+
+-(void)deviceOrientationChange:(UIDeviceOrientation)orientation{
+    [self orientationDevice:orientation];
+}
+
+-(void)orientationDevice:(UIDeviceOrientation)orientation{
     NSInteger degress;
     
     switch (orientation) {
@@ -444,5 +456,6 @@
         completion();
     }];
 }
+
 
 @end
