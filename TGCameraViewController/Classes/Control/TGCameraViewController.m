@@ -54,6 +54,7 @@
 
 @property (strong, nonatomic) TGCamera *camera;
 @property (nonatomic) BOOL wasLoaded;
+@property (nonatomic) UIDeviceOrientation deviceOrientation;
 
 - (IBAction)closeTapped;
 - (IBAction)gridTapped;
@@ -382,6 +383,7 @@
 }
 
 -(void)deviceOrientationChange:(UIDeviceOrientation)orientation{
+    self.deviceOrientation = orientation;
     [self orientationDevice:orientation];
 }
 
