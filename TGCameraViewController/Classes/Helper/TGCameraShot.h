@@ -33,6 +33,6 @@
             stillImageOutput:(AVCaptureStillImageOutput *)stillImageOutput
             videoOrientation:(AVCaptureVideoOrientation)videoOrientation
                     cropSize:(CGSize)cropSize
-                  completion:(void (^)(UIImage *photo))completion;
+                  completion:(void (^)(UIImage *photo,NSDictionary *meta))completion;
 
 @end

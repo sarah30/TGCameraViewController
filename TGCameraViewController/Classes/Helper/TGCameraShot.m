@@ -25,6 +25,7 @@
 
 @import AssetsLibrary;
 #import "TGCameraShot.h"
+#import <ImageIO/ImageIO.h>
 
 @interface TGCameraShot ()
 
@@ -36,7 +37,7 @@
 
 @implementation TGCameraShot
 
-+ (void)takePhotoCaptureView:(UIView *)captureView stillImageOutput:(AVCaptureStillImageOutput *)stillImageOutput videoOrientation:(AVCaptureVideoOrientation)videoOrientation cropSize:(CGSize)cropSize completion:(void (^)(UIImage *))completion
++ (void)takePhotoCaptureView:(UIView *)captureView stillImageOutput:(AVCaptureStillImageOutput *)stillImageOutput videoOrientation:(AVCaptureVideoOrientation)videoOrientation cropSize:(CGSize)cropSize completion:(void (^)(UIImage *photo,NSDictionary *meta))completion
 {    
     AVCaptureConnection *videoConnection = nil;
     
@@ -77,7 +78,11 @@
             }
             
             UIImage *croppedImage = [weakSelf cropImage:image withCropSize:CGSizeMake(crop_size_, crop_size_)];
-            completion(croppedImage);
+
+            CGImageSourceRef sourceRef = CGImageSourceCreateWithData((CFDataRef)imageData, NULL);
+            NSDictionary *meta = (__bridge NSDictionary *)CGImageSourceCopyPropertiesAtIndex(sourceRef, 0, NULL);
+
+            completion(croppedImage,meta);
         }
     }];
 }

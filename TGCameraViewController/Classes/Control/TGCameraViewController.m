@@ -328,12 +328,12 @@
     
     [self viewWillDisappearWithCompletion:^{
         [_camera takePhotoWithCaptureView:_captureView videoOrientation:videoOrientation cropSize:_captureView.frame.size
-        completion:^(UIImage *photo) {
+        completion:^(UIImage *photo,NSDictionary *meta) {
             if ([_delegate respondsToSelector:@selector(cameraShouldShowPreviewScreen)]) {
                 if ([_delegate cameraShouldShowPreviewScreen]) {
                     [self navigateToPhotoViewController:photo];
                 } else {
-                    [_delegate cameraDidTakePhoto:photo exifDict:nil withDisappearingTime:0];
+                    [_delegate cameraDidTakePhoto:photo exifDict:[meta mutableCopy] withDisappearingTime:0];
                 }
             } else {
                 [self navigateToPhotoViewController:photo];
