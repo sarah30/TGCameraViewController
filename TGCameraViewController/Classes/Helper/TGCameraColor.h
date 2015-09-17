@@ -30,4 +30,10 @@
 + (void)setTintColor:(UIColor *)tintColor;
 + (UIColor *)tintColor;
 
++ (void)setBarColor:(UIColor *)barColor;
++ (UIColor *)barColor;
+
++ (void)setBarTintColor:(UIColor *)barTintColor;
++ (UIColor *)barTintColor;
+
 @end

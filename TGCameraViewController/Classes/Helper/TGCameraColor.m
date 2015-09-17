@@ -26,6 +26,9 @@
 #import "TGCameraColor.h"
 
 static UIColor *staticTintColor = nil;
+static UIColor *staticBarColor = nil;
+static UIColor *staticBarTintColor = nil;
+
 @interface TGCameraColor()
 
 + (UIColor *)colorWithRed:(CGFloat)red green:(CGFloat)green blue:(CGFloat)blue;
@@ -39,6 +42,14 @@ static UIColor *staticTintColor = nil;
     staticTintColor = tintColor;
 }
 
++(void)setBarColor:(UIColor*)barColor {
+    staticBarColor = barColor;
+}
+
++(void)setBarTintColor:(UIColor*)barTintColor {
+    staticBarTintColor = barTintColor;
+}
+
 + (UIColor *)grayColor
 {
     return [self colorWithRed:200 green:200 blue:200];
@@ -47,6 +58,16 @@ static UIColor *staticTintColor = nil;
 + (UIColor *)tintColor
 {
     return staticTintColor != nil ? staticTintColor : [self colorWithRed:255 green:91 blue:1];
+}
+
++ (UIColor *)barColor
+{
+    return staticBarColor != nil ? staticBarColor : [UIColor blackColor];
+}
+
++ (UIColor *)barTintColor
+{
+    return staticBarTintColor != nil ? staticBarTintColor : [UIColor whiteColor];
 }
 
 + (UIColor *)colorWithRed:(CGFloat)red green:(CGFloat)green blue:(CGFloat)blue

@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="7706" systemVersion="14D136" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
     <dependencies>
-        <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="7703"/>
         <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
     </dependencies>
@@ -21,14 +20,14 @@
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="rRi-bL-lCE" userLabel="Top View">
-                    <rect key="frame" x="0.0" y="0.0" width="600" height="60"/>
+                    <rect key="frame" x="0.0" y="0.0" width="600" height="50"/>
                     <color key="backgroundColor" red="0.1176470588" green="0.1176470588" blue="0.1176470588" alpha="1" colorSpace="calibratedRGB"/>
                     <constraints>
-                        <constraint firstAttribute="height" constant="60" id="tVK-li-H3V"/>
+                        <constraint firstAttribute="height" constant="50" id="tVK-li-H3V"/>
                     </constraints>
                 </view>
                 <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="AgS-wg-ici" userLabel="Photo View">
-                    <rect key="frame" x="0.0" y="60" width="600" height="600"/>
+                    <rect key="frame" x="0.0" y="50" width="600" height="600"/>
                     <constraints>
                         <constraint firstAttribute="width" secondItem="AgS-wg-ici" secondAttribute="height" multiplier="1:1" id="qsw-BM-KC1"/>
                     </constraints>
@@ -47,9 +46,6 @@
                                 <action selector="backTapped" destination="-1" eventType="touchUpInside" id="fwF-J8-ieM"/>
                             </connections>
                         </button>
-                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="CameraCheckMark" translatesAutoresizingMaskIntoConstraints="NO" id="Scs-OK-XY9">
-                            <rect key="frame" x="286" y="44" width="29" height="22"/>
-                        </imageView>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="bwi-ED-cl6" userLabel="Filter" customClass="TGTintedButton">
                             <rect key="frame" x="500" y="15" width="80" height="80"/>
                             <constraints>
@@ -79,26 +75,29 @@
                                 <constraint firstAttribute="width" constant="78" id="yyX-yf-LxR"/>
                             </constraints>
                         </imageView>
+                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="CameraCheckMark" translatesAutoresizingMaskIntoConstraints="NO" id="Scs-OK-XY9">
+                            <rect key="frame" x="286" y="45" width="29" height="22"/>
+                        </imageView>
                     </subviews>
                     <color key="backgroundColor" red="0.078431372549019607" green="0.078431372549019607" blue="0.078431372549019607" alpha="1" colorSpace="calibratedRGB"/>
                     <constraints>
                         <constraint firstItem="WAy-eH-OU9" firstAttribute="leading" secondItem="Wwe-hD-eWO" secondAttribute="leading" constant="20" id="5hN-ie-9dy"/>
                         <constraint firstAttribute="centerY" secondItem="bwi-ED-cl6" secondAttribute="centerY" id="I2p-r8-1NP"/>
                         <constraint firstAttribute="trailing" secondItem="bwi-ED-cl6" secondAttribute="trailing" constant="20" id="IYO-SA-Jab"/>
-                        <constraint firstItem="Scs-OK-XY9" firstAttribute="centerY" secondItem="pc5-8R-lAJ" secondAttribute="centerY" id="VPt-4s-DKt"/>
+                        <constraint firstItem="Scs-OK-XY9" firstAttribute="centerY" secondItem="C2l-5X-VBb" secondAttribute="centerY" id="KKb-wS-GbP"/>
                         <constraint firstAttribute="centerY" secondItem="pc5-8R-lAJ" secondAttribute="centerY" id="YBr-qj-UwX"/>
                         <constraint firstAttribute="centerX" secondItem="pc5-8R-lAJ" secondAttribute="centerX" id="f74-Qt-Ptb"/>
                         <constraint firstItem="pc5-8R-lAJ" firstAttribute="centerX" secondItem="C2l-5X-VBb" secondAttribute="centerX" id="h75-73-slw"/>
                         <constraint firstAttribute="centerY" secondItem="WAy-eH-OU9" secondAttribute="centerY" id="jly-9g-8s1"/>
-                        <constraint firstItem="Scs-OK-XY9" firstAttribute="centerX" secondItem="pc5-8R-lAJ" secondAttribute="centerX" id="s1v-1h-l1J"/>
                         <constraint firstItem="pc5-8R-lAJ" firstAttribute="centerY" secondItem="C2l-5X-VBb" secondAttribute="centerY" id="sXf-j4-geF"/>
+                        <constraint firstItem="Scs-OK-XY9" firstAttribute="centerX" secondItem="C2l-5X-VBb" secondAttribute="centerX" id="t9m-wB-Xdu"/>
                     </constraints>
                 </view>
                 <view userInteractionEnabled="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ubt-nz-mqT" userLabel="Actions View">
-                    <rect key="frame" x="0.0" y="660" width="600" height="50"/>
+                    <rect key="frame" x="0.0" y="650" width="600" height="60"/>
                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                     <constraints>
-                        <constraint firstAttribute="height" constant="50" id="AmE-W0-HE1"/>
+                        <constraint firstAttribute="height" constant="60" id="AmE-W0-HE1"/>
                     </constraints>
                 </view>
             </subviews>

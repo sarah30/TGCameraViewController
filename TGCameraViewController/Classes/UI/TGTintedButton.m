@@ -27,7 +27,7 @@
     if (state != UIControlStateNormal) {
         return;
     }
-    
+
     UIImageRenderingMode renderingMode = self.disableTint ? UIImageRenderingModeAlwaysOriginal : UIImageRenderingModeAlwaysTemplate;
     [super setBackgroundImage:[image imageWithRenderingMode:renderingMode] forState:state];
 }
@@ -40,21 +40,27 @@
     [super setImage:[image imageWithRenderingMode:renderingMode] forState:state];
 }
 
-
 - (void)updateTintIfNeeded {
     UIColor *color = self.customTintColorOverride != nil ? self.customTintColorOverride : [TGCameraColor tintColor];
-    
+
     UIImageRenderingMode renderingMode = self.disableTint ? UIImageRenderingModeAlwaysOriginal : UIImageRenderingModeAlwaysTemplate;
-    
-    if(self.tintColor != color) {
+
+    if (self.tintColor != color) {
         [self setTintColor:color];
-        
-        UIImage * __weak backgroundImage = [[self backgroundImageForState:UIControlStateNormal] imageWithRenderingMode:renderingMode];
-        [self setBackgroundImage:backgroundImage forState:UIControlStateNormal];
-        
-        UIImage * __weak image = [[self imageForState:UIControlStateNormal] imageWithRenderingMode:renderingMode];
-        [self setImage:image forState:UIControlStateNormal];
-        
+
+        UIImage* backgroundImage = [self backgroundImageForState:UIControlStateNormal];
+        if (backgroundImage != nil) {
+            if ([backgroundImage renderingMode] != renderingMode) {
+                [self setBackgroundImage:[backgroundImage imageWithRenderingMode:renderingMode] forState:UIControlStateNormal];
+            }
+        }
+
+        UIImage* image = [self imageForState:UIControlStateNormal];
+        if (image != nil) {
+            if ([image renderingMode] != renderingMode) {
+                [self setImage:[image imageWithRenderingMode:renderingMode] forState:UIControlStateNormal];
+            }
+        }
     }
 }
 
