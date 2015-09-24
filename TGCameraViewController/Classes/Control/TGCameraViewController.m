@@ -125,6 +125,9 @@
             if (_wasLoaded == NO) {
                 _wasLoaded = YES;
                 [_camera insertSublayerWithCaptureView:_captureView atRootView:self.view];
+            }else{
+                [TGCameraSlideView hideSlideUpView:_slideUpView slideDownView:_slideDownView atView:_captureView completion:^{
+                }];
             }
         });
     });
@@ -132,6 +135,7 @@
     _shotButton.enabled = YES;
     _shotOutline.hidden = NO;
     _albumButton.enabled = YES;
+    _actionsView.hidden = NO;
 }
 
 - (void)viewDidAppear:(BOOL)animated {
@@ -510,10 +514,9 @@
 - (void)viewWillDisappearWithCompletion:(void (^)(void))completion {
     _actionsView.hidden = YES;
     
-//    [TGCameraSlideView showSlideUpView:_slideUpView slideDownView:_slideDownView atView:_captureView completion:^{
-//        completion();
-//    }];
-     completion();
+    [TGCameraSlideView showSlideUpView:_slideUpView slideDownView:_slideDownView atView:_captureView completion:^{
+        completion();
+    }];
 }
 
 
