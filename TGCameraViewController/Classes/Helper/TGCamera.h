@@ -69,6 +69,7 @@
                       completion:(void (^)(UIImage *photo,NSDictionary *meta))completion;
 
 - (void)toogleWithFlashButton:(UIButton *)flashButton;
+- (BOOL)noCameraInSimulator;
 
 @end
 

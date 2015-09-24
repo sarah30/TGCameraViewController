@@ -41,6 +41,7 @@ NSMutableDictionary *optionDictionary;
 @property (strong, nonatomic) AVCaptureVideoPreviewLayer *previewLayer;
 @property (strong, nonatomic) AVCaptureStillImageOutput *stillImageOutput;
 @property (strong, nonatomic) TGCameraGridView *gridView;
+@property (nonatomic) BOOL noCameraInSimulator;
 
 + (instancetype)newCamera;
 + (void)initOptions;
@@ -48,7 +49,6 @@ NSMutableDictionary *optionDictionary;
 - (void)setupWithFlashButton:(UIButton *)flashButton;
 
 @end
-
 
 
 @implementation TGCamera
@@ -161,6 +161,10 @@ NSMutableDictionary *optionDictionary;
     [TGCameraFlash flashModeWithCaptureSession:_session andButton:flashButton];
 }
 
+- (BOOL) noCameraInSimulator {
+    return _noCameraInSimulator;
+}
+
 #pragma mark -
 #pragma mark - Private methods
 
@@ -186,6 +190,11 @@ NSMutableDictionary *optionDictionary;
 
 - (void)setupWithFlashButton:(UIButton *)flashButton
 {
+    if (TARGET_IPHONE_SIMULATOR) {
+        _noCameraInSimulator = YES;
+        return;
+    }
+    
     //
     // create session
     //

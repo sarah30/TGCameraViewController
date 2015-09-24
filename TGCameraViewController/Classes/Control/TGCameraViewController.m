@@ -30,7 +30,7 @@
 #import <CoreLocation/CoreLocation.h>
 #import <AssetsLibrary/AssetsLibrary.h>
 #import <ImageIO/ImageIO.h>
-
+#import "TGCameraColor.h"
 
 @interface TGCameraViewController () <UIImagePickerControllerDelegate, UINavigationControllerDelegate>
 
@@ -48,13 +48,21 @@
 @property (strong, nonatomic) IBOutlet UIButton *flashButton;
 @property (strong, nonatomic) IBOutlet TGCameraSlideView *slideUpView;
 @property (strong, nonatomic) IBOutlet TGCameraSlideView *slideDownView;
+@property (strong, nonatomic) IBOutlet UIImageView *shotOutline;
+@property (weak, nonatomic) IBOutlet UIView *squareCaptureView;
+@property (weak, nonatomic) IBOutlet UIView *topView;
 
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *topViewHeight;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *toggleButtonWidth;
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *topLeftViewTopConstraint;
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *topRightViewTopConstraint;
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *bottomRightBottomConstraint;
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *bottomLeftBottomConstraint;
 
 @property (strong, nonatomic) TGCamera *camera;
 @property (nonatomic) BOOL wasLoaded;
 @property (nonatomic) UIDeviceOrientation deviceOrientation;
+@property (nonatomic) BOOL landscapeViewMode;
 
 - (IBAction)closeTapped;
 - (IBAction)gridTapped;
@@ -76,7 +84,7 @@
 
 - (void)viewDidLoad {
     NSLog(@"%s",__FUNCTION__);
-
+    
     [super viewDidLoad];
     
     if (CGRectGetHeight([[UIScreen mainScreen] bounds]) <= 480) {
@@ -98,71 +106,44 @@
     _topRightView.transform = CGAffineTransformMakeRotation(M_PI_2);
     _bottomLeftView.transform = CGAffineTransformMakeRotation(-M_PI_2);
     _bottomRightView.transform = CGAffineTransformMakeRotation(M_PI_2*2);
+    
+    // get the latest image from the album
+    [self latestPhoto];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
     NSLog(@"%s",__FUNCTION__);
-
+    
     [super viewWillAppear:animated];
+    
+    dispatch_async(dispatch_get_global_queue( DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void){
+        [_camera startRunning];
+        
+        dispatch_async(dispatch_get_main_queue(), ^(void){
+            _separatorView.hidden = YES;
+            
+            if (_wasLoaded == NO) {
+                _wasLoaded = YES;
+                [_camera insertSublayerWithCaptureView:_captureView atRootView:self.view];
+            }
+        });
+    });
+    
+    _shotButton.enabled = true;
+    _shotOutline.hidden = false;
+}
+
+- (void)viewDidAppear:(BOOL)animated {
+    NSLog(@"%s",__FUNCTION__);
+    
+    [super viewDidAppear:animated];
     
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(deviceOrientationDidChangeNotification)
                                                  name:UIDeviceOrientationDidChangeNotification
                                                object:nil];
     
-    _separatorView.hidden = NO;
-    
-    _actionsView.hidden = YES;
-    
-    _topLeftView.hidden =
-    _topRightView.hidden =
-    _bottomLeftView.hidden =
-    _bottomRightView.hidden = YES;
-    
-    _gridButton.enabled =
-    _toggleButton.enabled =
-    _shotButton.enabled =
-    _albumButton.enabled =
-    _flashButton.enabled = NO;
-}
-
-- (void)viewDidAppear:(BOOL)animated {
-    NSLog(@"%s",__FUNCTION__);
-
-    [super viewDidAppear:animated];
-    
     [self deviceOrientationDidChangeNotification];
-    
-    [_camera startRunning];
-    
-    _separatorView.hidden = YES;
-    
-    [TGCameraSlideView hideSlideUpView:_slideUpView slideDownView:_slideDownView atView:_captureView completion:^{
-        _topLeftView.hidden =
-        _topRightView.hidden =
-        _bottomLeftView.hidden =
-        _bottomRightView.hidden = NO;
-        
-        _actionsView.hidden = NO;
-        
-        _gridButton.enabled =
-        _toggleButton.enabled =
-        _shotButton.enabled =
-        _albumButton.enabled =
-        _flashButton.enabled = YES;
-    }];
-     
-    if (_wasLoaded == NO) {
-        _wasLoaded = YES;
-       [_camera insertSublayerWithCaptureView:_captureView atRootView:self.view];
-    }
-    
-    // get the latest image from the album
-    ALAuthorizationStatus status = [ALAssetsLibrary authorizationStatus];
-    if (status != ALAuthorizationStatusDenied) {
-        // access to album is authorised
-        [self latestPhoto];
-    }
 }
 
 - (void)viewDidDisappear:(BOOL)animated {
@@ -205,7 +186,7 @@
 - (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info {
     UIImage *photo = [TGAlbum imageWithMediaInfo:info];
     //NSMutableDictionary* exifDict;
-
+    
     if ([[info allKeys] containsObject:UIImagePickerControllerReferenceURL]){
         
         NSURL *assetURL = [info objectForKey:UIImagePickerControllerReferenceURL];
@@ -290,11 +271,20 @@
         
     }
     
-
+    
 }
 
 - (void)imagePickerControllerDidCancel:(UIImagePickerController *)picker {
     [self dismissViewControllerAnimated:YES completion:nil];
+}
+
+- (void)navigationController:(UINavigationController *)navigationController willShowViewController:(UIViewController *)viewController animated:(BOOL)animated
+{
+    [[UIApplication sharedApplication] setStatusBarHidden:YES];
+    [viewController prefersStatusBarHidden];
+    viewController.navigationController.navigationBar.barTintColor = [TGCameraColor barColor];
+    viewController.navigationController.navigationBar.tintColor = [TGCameraColor barTintColor];
+    viewController.navigationController.navigationBar.translucent = false;
 }
 
 #pragma mark -
@@ -328,17 +318,17 @@
     
     [self viewWillDisappearWithCompletion:^{
         [_camera takePhotoWithCaptureView:_captureView videoOrientation:videoOrientation cropSize:_captureView.frame.size
-        completion:^(UIImage *photo,NSDictionary *meta) {
-            if ([_delegate respondsToSelector:@selector(cameraShouldShowPreviewScreen)]) {
-                if ([_delegate cameraShouldShowPreviewScreen]) {
-                    [self navigateToPhotoViewController:photo];
-                } else {
-                    [_delegate cameraDidTakePhoto:photo exifDict:[meta mutableCopy] withDisappearingTime:0];
-                }
-            } else {
-                [self navigateToPhotoViewController:photo];
-            }
-        }];
+                               completion:^(UIImage *photo,NSDictionary *meta) {
+                                   if ([_delegate respondsToSelector:@selector(cameraShouldShowPreviewScreen)]) {
+                                       if ([_delegate cameraShouldShowPreviewScreen]) {
+                                           [self navigateToPhotoViewController:photo];
+                                       } else {
+                                           [_delegate cameraDidTakePhoto:photo exifDict:[meta mutableCopy] withDisappearingTime:0];
+                                       }
+                                   } else {
+                                       [self navigateToPhotoViewController:photo];
+                                   }
+                               }];
     }];
 }
 
@@ -348,13 +338,15 @@
 }
 
 - (IBAction)albumTapped {
-    _shotButton.enabled =
+    _shotButton.enabled = false;
+    _shotOutline.hidden = true;
     _albumButton.enabled = NO;
-
+    
     [self viewWillDisappearWithCompletion:^{
         UIImagePickerController *pickerController = [TGAlbum imagePickerControllerWithDelegate:self];
         [self presentViewController:pickerController animated:YES completion:nil];
     }];
+    
 }
 
 - (IBAction)toggleTapped {
@@ -395,19 +387,23 @@
         case UIDeviceOrientationPortrait:
         case UIDeviceOrientationUnknown:
             degress = 0;
+            [self portraitView];
             break;
             
         case UIDeviceOrientationLandscapeLeft:
             degress = 90;
+            [self landscapeView];
             break;
             
         case UIDeviceOrientationFaceDown:
         case UIDeviceOrientationPortraitUpsideDown:
             degress = 180;
+            [self portraitView];
             break;
             
         case UIDeviceOrientationLandscapeRight:
             degress = 270;
+            [self landscapeView];
             break;
     }
     
@@ -415,21 +411,80 @@
     CGAffineTransform transform = CGAffineTransformMakeRotation(radians);
     
     [UIView animateWithDuration:.5f animations:^{
-        _gridButton.transform =
-        _toggleButton.transform =
-        _albumButton.transform =
-        _flashButton.transform = transform;
+        //_gridButton.transform =
+        //_toggleButton.transform =
+        _albumButton.transform = transform;
+        //_flashButton.transform = transform;
     }];
 }
 
--(void)latestPhoto {
-    TGAssetsLibrary *library = [TGAssetsLibrary defaultAssetsLibrary];
-    
-    __weak __typeof(self)wSelf = self;
-    [library latestPhotoWithCompletion:^(UIImage *photo) {
-        wSelf.albumButton.disableTint = YES;
-        [wSelf.albumButton setImage:photo forState:UIControlStateNormal];
-    }];
+
+-(void)landscapeView
+{
+    if (!_landscapeViewMode) {
+        _landscapeViewMode = YES;
+        
+        [UIView animateWithDuration:0.3 animations:^{
+            _actionsView.alpha = 0;
+            _topView.alpha = 0;
+            
+        } completion: ^(BOOL finished) {
+            _actionsView.hidden = finished - 0.2;
+            _topView.hidden = finished - 0.2;
+            
+            _topLeftViewTopConstraint.constant = 0;
+            _topRightViewTopConstraint.constant = 0;
+            _bottomRightBottomConstraint.constant = 0;
+            _bottomLeftBottomConstraint.constant = 0;
+            
+        }];
+    }
+}
+
+-(void)portraitView
+{
+    if (_landscapeViewMode) {
+        _landscapeViewMode = NO;
+        
+        _actionsView.alpha = 0;
+        _actionsView.hidden = NO;
+        
+        _topView.alpha = 0;
+        _topView.hidden = NO;
+        
+        [UIView animateWithDuration:0.3 animations:^{
+            _actionsView.alpha = 0.8;
+            _topView.alpha = 0.8;
+            
+            _topLeftViewTopConstraint.constant = 50;
+            _topRightViewTopConstraint.constant = 50;
+            _bottomRightBottomConstraint.constant = 60;
+            _bottomLeftBottomConstraint.constant = 60;
+        }];
+    }
+}
+
+-(void)latestPhoto
+{
+    dispatch_async(dispatch_get_global_queue( DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void){
+        
+        // get the latest image from the album
+        ALAuthorizationStatus status = [ALAssetsLibrary authorizationStatus];
+        if (status != ALAuthorizationStatusDenied) {
+            TGAssetsLibrary *library = [TGAssetsLibrary defaultAssetsLibrary];
+            
+            __weak __typeof(self)wSelf = self;
+            [library latestPhotoWithCompletion:^(UIImage *photo) {
+                dispatch_async(dispatch_get_main_queue(), ^(void){
+                    
+                    wSelf.albumButton.disableTint = YES;
+                    [[wSelf.albumButton imageView] setContentMode: UIViewContentModeScaleAspectFill];
+                    [wSelf.albumButton setImage:photo forState:UIControlStateNormal];
+                    
+                });
+            }];
+        }
+    });
 }
 
 - (AVCaptureVideoOrientation)videoOrientationForDeviceOrientation:(UIDeviceOrientation)deviceOrientation {
