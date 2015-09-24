@@ -129,8 +129,9 @@
         });
     });
     
-    _shotButton.enabled = true;
-    _shotOutline.hidden = false;
+    _shotButton.enabled = YES;
+    _shotOutline.hidden = NO;
+    _albumButton.enabled = YES;
 }
 
 - (void)viewDidAppear:(BOOL)animated {
@@ -338,8 +339,8 @@
 }
 
 - (IBAction)albumTapped {
-    _shotButton.enabled = false;
-    _shotOutline.hidden = true;
+    _shotButton.enabled = NO;
+    _shotOutline.hidden = YES;
     _albumButton.enabled = NO;
     
     [self viewWillDisappearWithCompletion:^{
@@ -387,23 +388,23 @@
         case UIDeviceOrientationPortrait:
         case UIDeviceOrientationUnknown:
             degress = 0;
-            [self portraitView];
+            //[self portraitView];
             break;
             
         case UIDeviceOrientationLandscapeLeft:
             degress = 90;
-            [self landscapeView];
+            //[self landscapeView];
             break;
             
         case UIDeviceOrientationFaceDown:
         case UIDeviceOrientationPortraitUpsideDown:
             degress = 180;
-            [self portraitView];
+            //[self portraitView];
             break;
             
         case UIDeviceOrientationLandscapeRight:
             degress = 270;
-            [self landscapeView];
+            //[self landscapeView];
             break;
     }
     
@@ -411,10 +412,10 @@
     CGAffineTransform transform = CGAffineTransformMakeRotation(radians);
     
     [UIView animateWithDuration:.5f animations:^{
-        //_gridButton.transform =
-        //_toggleButton.transform =
-        _albumButton.transform = transform;
-        //_flashButton.transform = transform;
+        _gridButton.transform =
+        _toggleButton.transform =
+        _albumButton.transform =
+        _flashButton.transform = transform;
     }];
 }
 
@@ -509,9 +510,10 @@
 - (void)viewWillDisappearWithCompletion:(void (^)(void))completion {
     _actionsView.hidden = YES;
     
-    [TGCameraSlideView showSlideUpView:_slideUpView slideDownView:_slideDownView atView:_captureView completion:^{
-        completion();
-    }];
+//    [TGCameraSlideView showSlideUpView:_slideUpView slideDownView:_slideDownView atView:_captureView completion:^{
+//        completion();
+//    }];
+     completion();
 }
 
 
